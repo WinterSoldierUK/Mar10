@@ -17,6 +17,8 @@ def player_animation():
 
     if player.colliderect(floor):
         player_y_speed = 0
+        #add the floor bounce correction - fix this later!
+        player.y = player.y - 1
         player_at_ceiling = False
 
 screen_width = 1280
@@ -60,8 +62,9 @@ while True:
     player_animation()
 
     screen.fill(bg_colour)
-    pygame.draw.rect(screen, green, floor)
     pygame.draw.rect(screen, light_grey, player)
+    pygame.draw.rect(screen, green, floor)
+    
    
     pygame.display.flip()
     clock.tick(60)
