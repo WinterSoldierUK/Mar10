@@ -6,9 +6,9 @@ pygame.init()
 clock = pygame.time.Clock()
 
 def player_animation():
-    global player_inflight, player_at_ceiling, player_y_speed
+    global player_at_ceiling, player_y_speed
     player.x += player_x_speed
-    if player_inflight == False and player_at_ceiling == False:
+    if player_at_ceiling == False:
         player.y -= player_y_speed
         if player.top < 675:
             player_at_ceiling = True
@@ -17,14 +17,12 @@ def player_animation():
 
     if player.colliderect(floor):
         player_y_speed = 0
-        player_inflight = False
         player_at_ceiling = False
 
 screen_width = 1280
 screen_height = 960
 player_x_speed = 0
 player_y_speed =0
-player_inflight = False
 player_at_ceiling = False
 player_at_floor = False
 
@@ -56,7 +54,7 @@ while True:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 #no double jumping bro!
-                if player_inflight != True:
+                if player_y_speed == 0:
                     player_y_speed += 7
 
     player_animation()
