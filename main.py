@@ -6,27 +6,32 @@ pygame.init()
 clock = pygame.time.Clock()
 
 def player_animation():
-    global player_at_ceiling, player_y_speed
+    global player_y_speed, gravity, player_inflight, player_thrust
+    
     player.x += player_x_speed
-    if player_at_ceiling == False:
+
+    if (player_thrust > 0 and player_inflight):
         player.y -= player_y_speed
-        if player.top < 675:
-            player_at_ceiling = True
-    else:    
+        player_thrust -= 1
+    else:
         player.y += player_y_speed
 
     if player.colliderect(floor):
         player_y_speed = 0
         #add the floor bounce correction - fix this later!
         player.y = player.y - 1
+        player_thrust = 20
         player_at_ceiling = False
+        player_inflight = False
 
 screen_width = 1280
 screen_height = 960
 player_x_speed = 0
-player_y_speed =0
-player_at_ceiling = False
-player_at_floor = False
+player_y_speed = 0
+player_thrust = 20
+player_horizontal_momentum = 7
+player_vertical_momentum = 7
+player_inflight = False
 
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption('Mar10')
@@ -45,19 +50,20 @@ while True:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT:
-                player_x_speed += 7
+                player_x_speed += player_horizontal_momentum
             if event.key == pygame.K_LEFT:
-                player_x_speed -= 7
+                player_x_speed -= player_horizontal_momentum
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
-                player_x_speed -= 7
+                player_x_speed -= player_horizontal_momentum
             if event.key == pygame.K_LEFT:
-                player_x_speed += 7
+                player_x_speed += player_horizontal_momentum
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 #no double jumping bro!
-                if player_y_speed == 0:
-                    player_y_speed += 7
+                if player_inflight == False:
+                    player_inflight = True
+                    player_y_speed += player_vertical_momentum
 
     player_animation()
 
